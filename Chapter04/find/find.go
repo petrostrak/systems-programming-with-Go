@@ -9,17 +9,23 @@ import (
 
 var (
 	printAll = false
-	minusS   *bool // This is for printing socket files
-	minusP   *bool // This is for printing pipes
-	minusSL  *bool // This is for printing symbolic links
-	minusD   *bool // This is for printing directories
-	minusF   *bool // This is for printing files
+	minusS   *bool   // This is for printing socket files
+	minusP   *bool   // This is for printing pipes
+	minusSL  *bool   // This is for printing symbolic links
+	minusD   *bool   // This is for printing directories
+	minusF   *bool   // This is for printing files
+	minusX   *string // This is for excluding files
+
 )
 
 func walkFunction(path string, info os.FileInfo, err error) error {
 	fileInfo, err := os.Stat(path)
 	if err != nil {
 		return err
+	}
+
+	if excludenames(path, *minusX) {
+		return nil
 	}
 
 	if printAll {
@@ -64,12 +70,23 @@ func walkFunction(path string, info os.FileInfo, err error) error {
 	return nil
 }
 
+func excludenames(name, exclude string) bool {
+	if exclude == "" {
+		return false
+	}
+	if filepath.Base(name) == exclude {
+		return true
+	}
+	return false
+}
+
 func main() {
 	minusS = flag.Bool("s", false, "Sockets")
 	minusP = flag.Bool("p", false, "Pipes")
 	minusSL = flag.Bool("sl", false, "Symbolic Links")
 	minusD = flag.Bool("d", false, "Directories")
 	minusF = flag.Bool("f", false, "Files")
+	minusX = flag.String("x", "", "files")
 
 	flag.Parse()
 	flags := flag.Args()
