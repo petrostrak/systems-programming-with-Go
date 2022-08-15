@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 	minusD   *bool   // This is for printing directories
 	minusF   *bool   // This is for printing files
 	minusX   *string // This is for excluding files
-
+	minusRE  *string // This is for printing files from regex
 )
 
 func walkFunction(path string, info os.FileInfo, err error) error {
@@ -25,6 +26,10 @@ func walkFunction(path string, info os.FileInfo, err error) error {
 	}
 
 	if excludenames(path, *minusX) {
+		return nil
+	}
+
+	if !regularExpression(path, *minusRE) {
 		return nil
 	}
 
@@ -78,6 +83,17 @@ func excludenames(name, exclude string) bool {
 		return true
 	}
 	return false
+}
+
+func regularExpression(name, regExp string) bool {
+	if regExp == "" {
+		return true
+	}
+	r, err := regexp.Compile(regExp)
+	if err != nil {
+		return false
+	}
+	return r.MatchString(regExp)
 }
 
 func main() {
