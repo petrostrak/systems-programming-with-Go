@@ -14,7 +14,7 @@ var (
 	MIN int = 0
 )
 
-func random(max, min int) int {
+func random(min, max int) int {
 	return rand.Intn(max-min) + min
 }
 
