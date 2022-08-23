@@ -24,9 +24,9 @@ func monitor(values <-chan File, count int) {
 
 	for i := 0; i < count; i++ {
 		x := <-values
-		totalWords = totalWords + x.Words
-		totalLines = totalLines + x.Lines
-		totalChars = totalChars + x.Characters
+		totalWords += x.Words
+		totalLines += x.Lines
+		totalChars += x.Characters
 
 		if x.Error == nil {
 			fmt.Printf("\t%d\t", x.Lines)
