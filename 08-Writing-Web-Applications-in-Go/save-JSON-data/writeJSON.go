@@ -1,5 +1,5 @@
 // Convert regular data into JSON format in order to
-// send it over a network connection.
+// send it over a network connection. (encode)
 package main
 
 import (
