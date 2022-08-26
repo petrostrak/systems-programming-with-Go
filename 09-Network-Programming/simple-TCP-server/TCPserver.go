@@ -38,6 +38,8 @@ func main() {
 	}
 
 	for {
+		// Read data from your client using bufio.NewReader().ReadString() .
+		// The aforementioned call allows to read input line by line.
 		netData, err := bufio.NewReader(c).ReadString('\n')
 		if err != nil {
 			fmt.Println(err)
